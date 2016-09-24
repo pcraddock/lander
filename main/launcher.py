@@ -164,7 +164,9 @@ while not done:
             elif event.key == pygame.K_SPACE:
                 #checks to see if the space key was pressed
                 next_level = level1.play(screen, clock, difficulty, audio_state, resource_location, resolution)
-                #if it was then run the next level (the code here will wait until the level is completed then drop back in)
+                #if it was then call the play function in the level1.py document i.e. the next level (the code here will wait until the level is completed then drop back in)
+                #note that the play function gets given the screen, clock, difficulty, audio_state, resource location, and resolution
+                #play will return true when the level has been beaten and the player has chosen to progress, or false if exiting out to the main menu
                 if next_level == True:
                     #if it is completed successfully then run the next level (uncomment when built)
                     #next_level = level2.play(screen, clock, difficulty, audio_state, resource_location, resolution)
