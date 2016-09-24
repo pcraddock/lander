@@ -72,9 +72,9 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             self.bg_image = resource_location+"moon.png"
             self.rect = self.image.get_rect()
             self.mask = pygame.mask.from_surface(self.image)
-            self.accel_g = int(round(1.62)) #m/s
+            self.accel_g = 1 #m/s
             self.rect.bottomleft = (0, resolution[1])
-            self.thrust = 3
+            self.thrust = 2
 
     #Create a list of sprites
     sprite_list = pygame.sprite.Group()

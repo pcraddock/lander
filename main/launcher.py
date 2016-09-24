@@ -85,52 +85,88 @@ class Buttons(pygame.sprite.Sprite):
 sprite_list = pygame.sprite.Group()
 #initialize a list of sprites that need to be displayed on the screen
 
-#initialize the sprites for the buttons
 audio_on = Buttons()
+#makes a button called audio_on
 audio_on.image = pygame.image.load(resource_location+"unmuted.png")
+#defines the image used for the button
 audio_on.xy_location = functions.resource("audio_icon", resolution)
+#defines where the button will appear
 sprite_list.add(audio_on)
+#adds the button to the list of sprites to display
 
 audio_off = Buttons()
+#makes a button called audio_off
 audio_off.image = pygame.image.load(resource_location+"muted.png")
+#defines the image used for the button
 audio_off.xy_location = functions.resource("audio_icon", resolution)
+#defines where the button will appear
 sprite_list.add(audio_off)
+#adds the button to the list of sprites to display
 
 low_res = Buttons()
+#makes a button called low_res
 low_res.image = pygame.image.load(resource_location+"low_res.png")
+#defines the image used for the button
 low_res.xy_location = functions.resource("res_icon", resolution)
+#defines where the button will appear
 sprite_list.add(low_res)
+#adds the button to the list of sprites to display
 
 high_res = Buttons()
+#makes a button called high_res
 high_res.image = pygame.image.load(resource_location+"high_res.png")
+#defines the image used for the button
 high_res.xy_location = low_res.xy_location = functions.resource("res_icon", resolution)
+#defines where the button will appear
 sprite_list.add(high_res)
+#adds the button to the list of sprites to display
 
-#initialize some default settings
-audio_state = True #on
+audio_state = True
+#a variable used to define whether the music is on or off by default
 
 done = False
 while not done:
+    #enables quitting of the game using esc
     for event in pygame.event.get():
+        #checks for events (e.g. clicking things, pressing keys)
         if event.type == pygame.QUIT:
+            #checks to see if the x in the corner of the window was pressed
             done = True
+            #drops out of the loop if it has been
         elif event.type == pygame.KEYDOWN:
+            #checks to see if a keyboard button was pressed
             if event.key == pygame.K_ESCAPE:
+                #checks to see if ESC was pressed
                 done = True
+                #drops out of the loop if it has been
             elif event.key == pygame.K_r:
+                #checks to see if the "r" key was pressed
                 resolution, resource_location = functions.toggle_resolution()
+                #calls a function to change the resolution in the hidden settings file
                 subprocess.Popen("python launcher.py")
+                #launches a new instance of the game which will read the new resolution from the hidden settings file
                 done = True
+                #closes the current instance of the game by dropping out of the loop
             elif event.key == pygame.K_m:
+                #checks to see if the "m" key was pressed
                 if audio_state == True:
+                    #checks to see if the music is on
                     audio_state = False
+                    #changes the audio state variable for future reference
                     pygame.mixer.music.pause()
+                    #pauses the music
                 elif audio_state == False:
+                    #checks to see if the music is off
                     audio_state = True
+                    #changes the audio state variable for future reference
                     pygame.mixer.music.unpause()
+                    #unpauses the music
             elif event.key == pygame.K_SPACE:
+                #checks to see if the space key was pressed
                 next_level = level1.play(screen, clock, difficulty, audio_state, resource_location, resolution)
+                #if it was then run the next level (the code here will wait until the level is completed then drop back in)
                 if next_level == True:
+                    #if it is completed successfully then run the next level (uncomment when built)
                     #next_level = level2.play(screen, clock, difficulty, audio_state, resource_location, resolution)
                     #if next_level == True:
                         #next_level = level3.play(screen, clock, difficulty, audio_state, resource_location, resolution)
@@ -140,16 +176,24 @@ while not done:
                     pass #do nothing (remove when levels are added)
 
     if audio_state == True:
+        #checks to see if the current audio state is on
         screen.blit(audio_on.image, audio_on.xy_location)
+        #prints the audio on button on the screen
     elif audio_state == False:
+        #checks to see if the current audio state is off
         screen.blit(audio_off.image, audio_off.xy_location)
+        #prints the audio off button on the screen
     if resolution == [1920, 1080]:
+        #checks to see if the current resolution is high
         screen.blit(high_res.image, high_res.xy_location)
+        #prints the high resolution button on the screen
     elif resolution == [1280, 720]:
+        #checks to see if the current resolution is low
         screen.blit(low_res.image, low_res.xy_location)
+        #prints the low resolution button on the screen
 
 
-    #load the title text
+    #print on the screen the text that appears on the title screen
     screen.blit(title_text, functions.resource("title", resolution))
     screen.blit(subtitle_text, functions.resource("subtitle", resolution))
     screen.blit(mute_text, functions.resource("mute", resolution))
@@ -157,10 +201,14 @@ while not done:
     screen.blit(exit_text, functions.resource("exit", resolution))
     screen.blit(play_text, functions.resource("play", resolution))
 
-    #finally set frame rate and flip the display
-    clock.tick(40)
+    clock.tick(30)
+    #essentially defines the maximum frame rate whilst keeping CPU usage low; frame rate may still be way lower than this
     pygame.display.flip()
+    #"flip" the display i.e. take what's been "blit"ed and display it to the user
     screen.fill(BLACK)
+    #cover up the last stuff on the screen
     screen.blit(background_image, [0,0])
+    #write the background image to the screen for the next pass
 
 pygame.quit()
+#quits the game
