@@ -23,8 +23,8 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #self.image.set_colorkey(WHITE)
             self.rect = self.image.get_rect()
             self.mask = pygame.mask.from_surface(self.image)
-            self.velocities = [20, 0]
-            self.c_position = [105, 75]
+            self.velocities = functions.resource("init_velocity", resolution)
+            self.c_position = functions.resource("init_position", resolution)
             self.angle = 0
             self.thrust = 0 #N
             self.angular_thrust = 0 #degrees
@@ -73,7 +73,7 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             self.rect = self.image.get_rect()
             self.mask = pygame.mask.from_surface(self.image)
             self.accel_g = int(round(1.62)) #m/s
-            self.rect.bottomleft = (0, 1080)
+            self.rect.bottomleft = (0, resolution[1])
             self.thrust = 3
 
     #Create a list of sprites
@@ -83,7 +83,7 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
     sprite_list.add(player)
 
     #text stuff
-    font_small = pygame.font.SysFont('Courier New', 30, True, False)
+    font_small = pygame.font.SysFont('Courier New', functions.resource("small_font", resolution), True, False)
 
     bg_img = pygame.image.load(planet.bg_image)
     player.rect.center = player.c_position
@@ -149,10 +149,10 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             elif player.fuel == 0:
                 fuel_txt = font_small.render("Fuel: 0% [FUEL EMPTY]", True, RED)
 
-            screen.blit(x_vel_txt, [15, 15])
-            screen.blit(y_vel_txt, [15, 45])
-            screen.blit(fuel_txt, [15, 75])
-            screen.blit(planet_tag, [15, 105])
+            screen.blit(x_vel_txt, functions.resource("x_vel_txt", resolution))
+            screen.blit(y_vel_txt, functions.resource("y_vel_txt", resolution))
+            screen.blit(fuel_txt, functions.resource("fuel_txt", resolution))
+            screen.blit(planet_tag, functions.resource("planet_tag", resolution))
 
             #Check for landing/collision with surface
             if pygame.sprite.collide_mask(player, planet) != None:
@@ -183,15 +183,15 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
                 in_level = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
-                    player.c_position = [105, 75]
-                    player.velocities = [20, 0]
+                    player.c_position = functions.resource("init_position", resolution)
+                    player.velocities = functions.resource("init_velocity", resolution)
                     player.angle = 0
                     player.angular_thrust = 0
                     player.fuel = 100
                     playing = True
                 if event.key == pygame.K_SPACE:
-                    player.c_position = [105, 75]
-                    player.velocities = [20, 0]
+                    player.c_position = functions.resource("init_position", resolution)
+                    player.velocities = functions.resource("init_velocity", resolution)
                     player.angle = 0
                     player.angular_thrust = 0
                     player.fuel = 100

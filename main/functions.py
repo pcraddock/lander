@@ -51,10 +51,10 @@ def surface_collision(screen, resolution, player, difficulty):
 
     if safe_landing(player, difficulty) == True:
         #If landing is safe display success messages
-        screen.blit(success_text, [620, 150])
-        screen.blit(instruct_text, [625, 250])
-        screen.blit(exit_text, [690, 325])
-        screen.blit(next_level_text, [480, 550])
+        screen.blit(success_text, resource("success", resolution))
+        screen.blit(instruct_text, resource("instruct", resolution))
+        screen.blit(exit_text, resource("exit_text", resolution))
+        screen.blit(next_level_text, resource("next_level", resolution))
         #And ensure craft stops moving and stays on surface
         accel_g, player.thrust, player.velocities = 0, 0, [0, 0]
         #Set safe landing check to True
@@ -63,9 +63,9 @@ def surface_collision(screen, resolution, player, difficulty):
     else:
         #If landing is crash, display try again messages
         player.explosion_sound.play()
-        screen.blit(crash_text, [520, 150])
-        screen.blit(instruct_text, [630, 250])
-        screen.blit(exit_text, [690, 325])
+        screen.blit(crash_text, resource("crash", resolution))
+        screen.blit(instruct_text, resource("instruct", resolution))
+        screen.blit(exit_text, resource("exit_text", resolution))
         #And ensure craft stops moving and stays on surface
         accel_g, player.thrust, player.velocities = 0, 0, [0, 0]
         #Set safe landing check to False
@@ -88,11 +88,17 @@ def resource(thing, res):
     "display" : [750, 25],
     "exit" : [1700, 25],
     "play" : [620, 675],
-    "success" : [620, 150],
+    "success" : [650, 150],
     "crash" : [520, 150],
-    "instruct" : [630, 150],
+    "instruct" : [630, 250],
     "exit_text" : [690, 325],
     "next_level" : [480, 550],
+    "init_velocity" : [20, 0],
+    "init_position" : [105, 75],
+    "x_vel_txt" : [15, 15],
+    "y_vel_txt" : [15, 45],
+    "fuel_txt" : [15, 75],
+    "planet_tag" : [15, 105],
     }
 
     low_res = {
@@ -108,11 +114,17 @@ def resource(thing, res):
     "display" : [500, 17],
     "exit" : [1133, 17],
     "play" : [413, 450],
-    "success" : [413, 100],
+    "success" : [433, 100],
     "crash" : [347, 100],
-    "instruct" : [420, 100],
+    "instruct" : [420, 167],
     "exit_text" : [460, 217],
     "next_level" : [320, 367],
+    "init_velocity" : [13, 0],
+    "init_position" : [70, 50],
+    "x_vel_txt" : [10, 10],
+    "y_vel_txt" : [10, 30],
+    "fuel_txt" : [10, 50],
+    "planet_tag" : [10, 70],
     }
 
     if res == [1280, 720]:
