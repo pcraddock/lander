@@ -162,11 +162,11 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #Check for falling off screen
             if player.rect.center[0] < 0:
                 #If falling off left, move onto right
-                player.rect.center = (player.rect.center[0]+1920, player.rect.center[1])
+                player.rect.center = (player.rect.center[0]+resolution[0], player.rect.center[1])
                 player.c_position = player.rect.center
-            elif player.rect.center[0] > 1920:
+            elif player.rect.center[0] > resolution[0]:
                 #If falling off right, move onto left
-                player.rect.center = (player.rect.center[0]-1920, player.rect.center[1])
+                player.rect.center = (player.rect.center[0]-resolution[0], player.rect.center[1])
                 player.c_position = player.rect.center
             elif player.rect.center[1] < 0:
                 #If falling off top, prevent further upward movement
@@ -175,7 +175,7 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
 
             #Draw sprites
             sprite_list.draw(screen)
-            clock.tick(25)
+            clock.tick(30)
             pygame.display.flip()
 
         for event in pygame.event.get():
