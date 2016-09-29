@@ -62,15 +62,15 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
                 #stops the player from being able to thrust up if there's no fuel
             self.angle += self.angular_thrust
             #takes the players current angle and alters it by the angular thrust
-            x_thrust = int(round(self.thrust * math.sin(math.radians(float(self.angle)))))
+            x_thrust = (self.thrust * math.sin(math.radians(float(self.angle))))
             #takes the thrust on the player and the players angle and works out the x component of that thrust
-            y_thrust = int(round(self.thrust * math.cos(math.radians(float(self.angle)))))
+            y_thrust = (self.thrust * math.cos(math.radians(float(self.angle))))
             #takes the thrust on the player and the players angle and works out the y component of that thrust
 
             self.velocities = (self.velocities[0]+x_thrust, self.velocities[1]+accel_g-y_thrust)
             #changes the players velocity by adding gravity and thrust
 
-            self.rect.center = (self.c_position[0]+self.velocities[0], self.c_position[1]+self.velocities[1])
+            self.rect.center = (self.c_position[0]+int(round(self.velocities[0])), self.c_position[1]+int(round(self.velocities[1])))
             #moves the centre of the image for the player by adding on the velocity
 
             self.c_position = player.rect.center
@@ -107,11 +107,11 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #calcultes the dimensions of the surface so that its location can be determined
             self.mask = pygame.mask.from_surface(self.image)
             #works out the border of the surface for collision detection
-            self.accel_g = 1
+            self.accel_g = 0.1
             #the acceleration due to gravity from the planet
             self.rect.bottomleft = (0, resolution[1])
             #ensuring that the planet surface lines up with the bottom of the screen (which is resolution dependant unless we had huge images)
-            self.thrust = 2
+            self.thrust = 0.5
             #the thrust that the player can exert (don't ask me why I put this in this section...)
 
     sprite_list = pygame.sprite.Group()
@@ -203,17 +203,17 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #create the text that names the planet
             if math.fabs(player.velocities[0]) > difficulty:
                 #check to see if the horizontal velocity is above the difficulty level (of max landing velocity)
-                x_vel_txt = font_small.render("Horizontal velocity: "+str(player.velocities[0]), True, RED)
+                x_vel_txt = font_small.render("Horizontal velocity: "+str(round(player.velocities[0], 1)), True, RED)
                 #if it is then create the text that shows horizontal velocity in red
             else:
-                x_vel_txt = font_small.render("Horizontal velocity: "+str(player.velocities[0]), True, GREEN)
+                x_vel_txt = font_small.render("Horizontal velocity: "+str(round(player.velocities[0], 1)), True, GREEN)
                 #if its not then create the text that shows the horizontal velocity in green
             if math.fabs(player.velocities[1]) > difficulty:
                 #check to see if the vertical velocity is above the difficulty level (of max landing velocity)
-                y_vel_txt = font_small.render("Vertical velocity: "+str(player.velocities[1]), True, RED)
+                y_vel_txt = font_small.render("Vertical velocity: "+str(round(player.velocities[1], 1)), True, RED)
                 #if it is then create the text that shows vertical velocity in red
             else:
-                y_vel_txt = font_small.render("Vertical velocity: "+str(player.velocities[1]), True, GREEN)
+                y_vel_txt = font_small.render("Vertical velocity: "+str(round(player.velocities[1], 1)), True, GREEN)
                 #if its not then create the text that shows horizontal velocity in green
 
             if player.fuel > 75:
@@ -276,6 +276,14 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #display the player on the screen
             clock.tick(30)
             #ensure that at least 1/30th of a second has passed
+
+            frame_rate = clock.get_fps()
+            #gets the current framerate of the game
+            frame_rate_txt = font_small.render("FPS: "+str(round(frame_rate, 1)), True, WHITE)
+            #generates text to render that frame rate
+            screen.blit(frame_rate_txt, functions.resource("frame_rate_txt", resolution))
+            #prints that text on the screen in an appropriate place for the chosen resolution
+
             pygame.display.flip()
             #show the screen to the user
 

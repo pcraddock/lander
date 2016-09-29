@@ -1,4 +1,7 @@
-import pygame, math
+import pygame
+#we need pygame for fonts
+import math
+#we need pythons math library for absolute value functions for safe landing calculations
 
 BLACK  = (  0,   0,   0)
 WHITE  = (255, 255, 255)
@@ -6,9 +9,12 @@ GREEN  = (  0, 255,   0)
 YELLOW = (255, 255,   0)
 RED    = (255,   0,   0)
 ORANGE = (255, 127,   0)
+#RGB colour definitions for text
 
 def get_resolution():
+    """function that reads a hidden .settings.txt file where the resolution preferences are stored (we can store other preferences here later)"""
     try:
+        #runs if the file exists
         file = open("../resources/.settings.txt", "r")
         contents = file.read()
         if contents == "1920x1080":
@@ -17,6 +23,7 @@ def get_resolution():
             resolution = [1280, 720]
         file.close()
     except:
+        #runs if the file doesn't exist
         file = open("../resources/.settings.txt", "w")
         file.write("1920x1080")
         file.close()
@@ -93,12 +100,13 @@ def resource(thing, res):
     "instruct" : [590, 250],
     "exit_text" : [660, 325],
     "next_level" : [450, 550],
-    "init_velocity" : [20, 0],
+    "init_velocity" : [6, 3],
     "init_position" : [105, 75],
     "x_vel_txt" : [15, 15],
     "y_vel_txt" : [15, 45],
     "fuel_txt" : [15, 75],
     "planet_tag" : [15, 105],
+    "frame_rate_txt" : [15, 105],
     }
 
     low_res = {
@@ -119,12 +127,13 @@ def resource(thing, res):
     "instruct" : [403, 167],
     "exit_text" : [447, 217],
     "next_level" : [303, 367],
-    "init_velocity" : [13, 0],
+    "init_velocity" : [2, 1],
     "init_position" : [70, 50],
     "x_vel_txt" : [10, 10],
     "y_vel_txt" : [10, 30],
     "fuel_txt" : [10, 50],
     "planet_tag" : [10, 70],
+    "frame_rate_txt" : [10, 90],
     }
 
     if res == [1280, 720]:
