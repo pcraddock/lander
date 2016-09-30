@@ -58,6 +58,7 @@ def surface_collision(screen, resolution, player, difficulty):
 
     if safe_landing(player, difficulty) == True:
         #If landing is safe display success messages
+        player.landed_sound.play()
         screen.blit(success_text, resource("success", resolution))
         screen.blit(instruct_text, resource("instruct", resolution))
         screen.blit(exit_text, resource("exit_text", resolution))
@@ -100,7 +101,7 @@ def resource(thing, res):
     "instruct" : [590, 250],
     "exit_text" : [660, 325],
     "next_level" : [450, 550],
-    "init_velocity" : [6, 3],
+    "init_velocity" : [9, 9],
     "init_position" : [105, 75],
     "x_vel_txt" : [15, 15],
     "y_vel_txt" : [15, 45],
@@ -127,7 +128,7 @@ def resource(thing, res):
     "instruct" : [403, 167],
     "exit_text" : [447, 217],
     "next_level" : [303, 367],
-    "init_velocity" : [2, 1],
+    "init_velocity" : [6, 6],
     "init_position" : [70, 50],
     "x_vel_txt" : [10, 10],
     "y_vel_txt" : [10, 30],

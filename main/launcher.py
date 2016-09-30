@@ -169,13 +169,13 @@ while not done:
                 #play will return true when the level has been beaten and the player has chosen to progress, or false if exiting out to the main menu
                 if next_level == True:
                     #if it is completed successfully then run the next level (uncomment when built)
-                    #next_level = level2.play(screen, clock, difficulty, audio_state, resource_location, resolution)
-                    #if next_level == True:
-                        #next_level = level3.play(screen, clock, difficulty, audio_state, resource_location, resolution)
-                        #if next_level == True:
+                    next_level = level2.play(screen, clock, difficulty, audio_state, resource_location, resolution)
+                    if next_level == True:
+                        next_level = level3.play(screen, clock, difficulty, audio_state, resource_location, resolution)
+                        if next_level == True:
                             #next_level = level4.play(screen, clock, difficulty, audio_state, resource_location, resolution)
                             #etc etc
-                    pass #do nothing (remove when levels are added)
+                            pass #do nothing (remove when levels are added)
 
     if audio_state == True:
         #checks to see if the current audio state is on

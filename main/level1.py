@@ -51,6 +51,8 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #loads a burn sound to be played whilst thrusting
             self.explosion_sound = pygame.mixer.Sound("../resources/explosion.ogg")
             #loads an explosion sound to be played on crashing
+            self.landed_sound = pygame.mixer.Sound(".../resources/landed.ogg")
+            #Loads a voice-over sound to be played when landed successfully
 
         def update(self, accel_g):
             """ this is a function which is updated each frame to calculate where the player should next appear given their position, velocity, thrust, and the current gravity """
@@ -146,6 +148,8 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
         #if we are muted then set the burn sound to silence
         player.explosion_sound = pygame.mixer.Sound("../resources/silence.ogg")
         #if we are muted then set the explosion sound to silence
+        player.landed_sound = pygame.mixer.Sound("../resources/silence.ogg")
+        #if we are muted then set the landed sound to silence
 
     while in_level:
         #enables us to drop out of the level if we choose to
