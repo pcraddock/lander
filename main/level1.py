@@ -4,6 +4,7 @@ import math
 #math gives us access to absolute magnitude functions
 import pygame
 #pygame gives us easy graphics toys
+import Drag
 
 def play(screen, clock, difficulty, muted, resource_location, resolution):
     #is the play function that's called by the launcher
@@ -51,8 +52,6 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #loads a burn sound to be played whilst thrusting
             self.explosion_sound = pygame.mixer.Sound("../resources/explosion.ogg")
             #loads an explosion sound to be played on crashing
-            self.landed_sound = pygame.mixer.Sound(".../resources/landed.ogg")
-            #Loads a voice-over sound to be played when landed successfully
 
         def update(self, accel_g):
             """ this is a function which is updated each frame to calculate where the player should next appear given their position, velocity, thrust, and the current gravity """
@@ -69,8 +68,19 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             y_thrust = (self.thrust * math.cos(math.radians(float(self.angle))))
             #takes the thrust on the player and the players angle and works out the y component of that thrust
 
-            self.velocities = (self.velocities[0]+x_thrust, self.velocities[1]+accel_g-y_thrust)
-            #changes the players velocity by adding gravity and thrust
+            self.drag_x = Drag.Drag(1,self.velocities[0],1,1)
+			#calculates drag for x axis
+            self.drag_y = Drag.Drag(1,self.velocities[1],1,1)
+			#calculates drag for y axis
+            m = 1000
+			#m for mass, defined arbitrarily as 1000 for now
+            drag_decel_x = (self.drag_x)/m
+			#horizontal deceleration due to drag
+            drag_decel_y = (self.drag_y)/m
+			#vertical deceleration due to drag
+			
+            self.velocities = (self.velocities[0]+x_thrust-drag_decel_x, self.velocities[1]+accel_g-y_thrust-drag_decel_y)
+            #changes the players velocity by adding gravity, thrust and drag deceleration
 
             self.rect.center = (self.c_position[0]+int(round(self.velocities[0])), self.c_position[1]+int(round(self.velocities[1])))
             #moves the centre of the image for the player by adding on the velocity
@@ -115,6 +125,8 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #ensuring that the planet surface lines up with the bottom of the screen (which is resolution dependant unless we had huge images)
             self.thrust = 0.5
             #the thrust that the player can exert (don't ask me why I put this in this section...)
+			#self.airDensity = 0
+			#Defines the density of the planets atmosphere
 
     sprite_list = pygame.sprite.Group()
     #creates a list of sprites
@@ -148,8 +160,6 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
         #if we are muted then set the burn sound to silence
         player.explosion_sound = pygame.mixer.Sound("../resources/silence.ogg")
         #if we are muted then set the explosion sound to silence
-        player.landed_sound = pygame.mixer.Sound("../resources/silence.ogg")
-        #if we are muted then set the landed sound to silence
 
     while in_level:
         #enables us to drop out of the level if we choose to
@@ -203,6 +213,11 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             player.rect.center = player.update(planet.accel_g)
             #update the center of the player based on the update function defined in the craft definition at the top
 
+            drag_txt_x = font_small.render("Horizontal Drag: "+str(round(player.drag_x)), True, WHITE)
+			#creates the text that says what horizontal drag is
+            drag_txt_y = font_small.render("Vertical Drag: "+str(round(player.drag_y)), True, WHITE)
+			#creates the text that says what Vertical drag is
+			
             planet_tag = font_small.render("Planet: "+str(planet.name), True, WHITE)
             #create the text that names the planet
             if math.fabs(player.velocities[0]) > difficulty:
@@ -249,6 +264,10 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #display the fuel level on the screen (in a place appropraite for the resolution)
             screen.blit(planet_tag, functions.resource("planet_tag", resolution))
             #display the planet name on the screen (in a place appropraite for the resolution)
+            screen.blit(drag_txt_x, functions.resource("drag_txt_x", resolution))
+			#display the horizontal drag text on the screen
+            screen.blit(drag_txt_y, functions.resource("drag_txt_y", resolution))
+			#display the horizontal drag text on the screen
 
             if pygame.sprite.collide_mask(player, planet) != None:
                 #check to see if the player has collide with the planet
