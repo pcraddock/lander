@@ -127,9 +127,27 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #the thrust that the player can exert (don't ask me why I put this in this section...)
             self.airDensity = 1 #for now
 			#Defines the density of the planets atmosphere
+			
+    class Danger_Zone(pygame.sprite.Sprite):
+        """Object class for danger zones"""
+        def __init__(self):
+            super(Danger_Zone, self).__init__()
+			
+            self.image = pygame.image.load(resource_location+"titan_lake.png").convert_alpha()
+			#Image to use for danger zone
+            self.bg_image = resource_location+"titan_lake.png"
+            #the image used as a background for the danger zone
+            self.rect = self.image.get_rect()
+            #calcultes the dimensions of the surface so that its location can be determined
+            self.mask = pygame.mask.from_surface(self.image)
+            #works out the border of the surface for collision detection
+            self.zone_location=(0,645)
+            self.rect.topleft=self.zone_location
 
     sprite_list = pygame.sprite.Group()
     #creates a list of sprites
+    danger_zone = Danger_Zone()
+	#make a danger zone called danger zone
     planet = Planet()
     #make a planet called planet
     player = Craft()
@@ -139,7 +157,9 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
 
     font_small = pygame.font.SysFont('Courier New', functions.resource("small_font", resolution), True, False)
     #define what font will be used to print the info in the top left depending on the resolution
-
+	
+    danger_img = pygame.image.load(danger_zone.bg_image)
+    #load the background image from the danger zone class onto the screen
     player.rect.center = player.c_position
     #load the image of the player onto the screen at its current position
 
@@ -216,6 +236,8 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
             #update the center of the player based on the update function defined in the craft definition at the top
             functions.player_planet_motion(player, planet, screen, resolution)
             #determine player/background interactions for final position
+            #screen.blit(danger_img, danger_zone.zone_location)
+			#display danger zone image on the screen
 
             drag_txt_x = font_small.render("Horizontal Drag: "+str(round(player.drag_x)), True, WHITE)
 			#creates the text that says what horizontal drag is
@@ -267,6 +289,17 @@ def play(screen, clock, difficulty, muted, resource_location, resolution):
                 player, safe_landing_check, playing = functions.surface_collision(screen, resolution, player, difficulty, planet)
                 #call the safe landing check function described above, and remember whether the landing was safe or not
 
+		    #CREATING A DANGER ZONE
+            if pygame.sprite.collide_mask(player, danger_zone) != None:
+			    #set the difficulty as 0, since there should be no scenario in which landing is possible
+				difficulty = 0
+			    #check to see if the player has collide with the danger zone
+				player.burn_sound.stop()
+                #if it has then stop the engine burning sound
+				player, safe_landing_check, playing = functions.object_collision(screen, resolution, player, difficulty)
+                #call the safe landing check function described above, and remember whether the landing was safe or not
+
+				
             sprite_list.draw(screen)
             #display the player on the screen
             clock.tick(30)
